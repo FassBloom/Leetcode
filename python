@@ -33,4 +33,4 @@ Counter({'blue': 3, 'red': 2, 'green': 1})
 ```python
 reduce(add, [1,2,3,4,5])   # 计算列表和：1+2+3+4+5
 ```
-
+#xiugai
