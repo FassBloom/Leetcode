@@ -11,46 +11,64 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+/*
+判出口（终点、越界）->剪枝->扩展->标记->递归->还原
+
+void dfs()//参数用来表示状态
+{
+    if(到达终点状态)
+    {
+        ...//根据题意添加
+        return;
+    }
+    if(越界或者是不合法状态)
+        return;
+    if(特殊状态)//剪枝
+        return ;
+    for(扩展方式)
+    {
+        if(扩展方式所达到状态合法)
+        {
+            修改操作;//根据题意来添加
+            标记；
+            dfs（）；
+            (还原标记)；
+            //是否还原标记根据题意
+            //如果加上（还原标记）就是 回溯法
+        }
+    }
+}
+*/
 public class solution {
     public static void main(String[] args) {
-        /*int a = 1;
-        int n = 3;
-        int[] nums1 = {1, 2, 3};
-        int[] nums2 = {5, 0, 0, 6, 1, 6, 2, 2, 4};
-        List<Integer> aa = new ArrayList<>();
-        String[] s = {"dog", "racecar", "car"};*/
-        ListNode tail = new ListNode(3);
-        ListNode sec = new ListNode(2,tail);
-        ListNode fir = new ListNode(1,sec);
-        ListNode head = new ListNode(0,fir);
-        ListNode dummy = new ListNode(0,head);
-        ListNode fir2 = fir;
-        fir2.val = 11;
-        fir2.next = dummy;
-        System.out.println("fir: "+fir.val+fir.next);
-        System.out.println("fir2: "+fir2.val+fir2.next);
-        ListNode result = removeNthFromEnd2(head,2);
-        System.out.println("result: "+result);
+        String s = "abpcplea";
+        int[][] nums2 = {{1,1,0,0,0},{1,1,0,0,0},{0,0,0,1,1},{0,0,0,1,1}};
+        List<String> d = new ArrayList<>(Arrays.asList("ale", "apple", "monkey", "plea"));
+        int[] nums1 = {1,5,11,5};
+        Object result = maxAreaOfIsland(nums2);
+        System.out.println("result: " + result);
     }
 
-    public static ListNode removeNthFromEnd2(ListNode head, int n) {
-        ListNode dummy = new ListNode(0, head);
-        int length = getLength(head);
-        ListNode cur = dummy;
-        for (int i = 1; i < length - n + 1; ++i) {
-            cur = cur.next;
+    public static int maxAreaOfIsland(int[][] grid) {
+        int res =0;
+        int[][] dire = new int[][]{{0,1},{1,0},{-1,0},{0,-1}};
+        for(int i=0;i< grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                res=Math.max(res, dfs(grid,i,j,dire));
+            }
         }
-        cur.next = cur.next.next;
-        return dummy.next;
+        return res;
     }
-
-    public static int getLength(ListNode head) {
-        int length = 0;
-        while (head != null) {
-            ++length;
-            head = head.next;
+    public static int dfs(int[][] grid, int x, int y, int[][] dire){
+        if(x> grid.length || x<0 || y<0 || y>grid[0].length || grid[x][y]==0){
+            return 0;
         }
-        return length;
+        grid[0][0]=0;
+        int res=1;
+        for(int[] di:dire){
+            res+=dfs(grid,x+di[0],y+di[1],dire);
+        }
+        return res;
     }
 
 
