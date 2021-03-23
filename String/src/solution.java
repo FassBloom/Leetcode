@@ -2,35 +2,21 @@ import com.sun.xml.internal.ws.util.StringUtils;
 
 import javax.swing.tree.TreeNode;
 import javax.xml.stream.events.Characters;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /*
 判出口（终点、越界）->剪枝->扩展->标记->递归->还原
 
 void dfs()//参数用来表示状态
 {
-    if(到达终点状态)
-    {
-        ...//根据题意添加
+    if(到达终点状态，越界或者是不合法状态)
         return;
-    }
-    if(越界或者是不合法状态)
-        return;
-    if(特殊状态)//剪枝
-        return ;
     for(扩展方式)
     {
         if(扩展方式所达到状态合法)
         {
-            修改操作;//根据题意来添加
-            标记；
+            修改操作;//根据题意来添加，area++
+            标记；eg:grid[x][y]=0,一定要修改！！
             dfs（）；
             (还原标记)；
             //是否还原标记根据题意
@@ -54,23 +40,29 @@ public class solution {
         int[][] dire = new int[][]{{0,1},{1,0},{-1,0},{0,-1}};
         for(int i=0;i< grid.length;i++){
             for(int j=0;j<grid[0].length;j++){
-                res=Math.max(res, dfs(grid,i,j,dire));
+                int cur = 0;
+                Deque<Integer> si = new LinkedList<>();
+                Deque<Integer> sj = new LinkedList<>();
+                si.push(i);
+                sj.push(j);
+                while (!si.isEmpty()){
+                    int x = si.pop();
+                    int y = sj.pop();
+                    if(x>= grid.length || x<0 || y<0 || y>=grid[0].length || grid[x][y]==0){
+                        continue;
+                    }
+                    cur++;
+                    grid[x][y]=0;
+                    for(int index=0;index<4;index++){
+                        si.push(x+dire[index][0]);
+                        sj.push(y+dire[index][1]);
+                    }
+                }
+                res=Math.max(res,cur);
             }
         }
         return res;
     }
-    public static int dfs(int[][] grid, int x, int y, int[][] dire){
-        if(x> grid.length || x<0 || y<0 || y>grid[0].length || grid[x][y]==0){
-            return 0;
-        }
-        grid[0][0]=0;
-        int res=1;
-        for(int[] di:dire){
-            res+=dfs(grid,x+di[0],y+di[1],dire);
-        }
-        return res;
-    }
-
 
     public static class ListNode {
         int val;
