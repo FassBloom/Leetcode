@@ -23,17 +23,20 @@ public class PrintABCUsingWaitNotify {
 
     private void printLetter(String name, int targetState) {
         for (int i = 0; i < times; i++) {
-
+            System.out.println("i=: " + i + "    thread:" + Thread.currentThread().getName());
             synchronized (LOCK) {
+                System.out.println(Thread.currentThread().getName()+"getLock");
                 while (state % 3 != targetState) {
                     try {
+                        System.out.println(Thread.currentThread().getName()+"wait");
                         LOCK.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
                 state++;
-                System.out.print(name);
+                System.out.println(name);
+                System.out.println("notifyAll");
                 LOCK.notifyAll();
             }
         }

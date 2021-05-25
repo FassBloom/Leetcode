@@ -20,7 +20,6 @@ public class PrintABCUsingLock {
                 state++;
                 i++;
                 System.out.println("aaaaaaaaa"+name+"   i="+i+"    state="+ (state - 1));
-
             }
             System.out.println("end");
             lock.unlock();
