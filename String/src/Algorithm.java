@@ -28,13 +28,34 @@ import java.util.stream.IntStream;
 public class Algorithm {
     public static void main(String[] args) {
         //10 100 20 10
+        ListNode n5 = new ListNode(5);
+        ListNode n4 = new ListNode(4,n5);
+        /*ListNode n3 = new ListNode(3,n4);
+        ListNode n2 = new ListNode(2,n3);
+        ListNode n1 = new ListNode(1,n2);*/
+        ListNode res = reverseBetween(n4,1,2);
        // ArrayList<Integer> ret = list.stream().distinct().collect(Collectors.toList())
-        ArrayList<Integer> res = BucketSort(new ArrayList<>(Arrays.asList(1,1,4,1)),10);
+        //ArrayList<Integer> res = BucketSort(new ArrayList<>(Arrays.asList(1,1,4,1)),10);
         System.out.println(res);
     }
 
-    public void jedis(){
-
+    public static ListNode reverseBetween(ListNode head, int left, int right) {
+        int cnt = 0;
+        ListNode dummy = new ListNode (0,head);
+        ListNode cur = dummy;
+        while(cnt<left-1){
+            cur=cur.next;
+            cnt++;
+        }
+        ListNode pre = cur;
+        cur = cur.next;
+        for(;cnt<right-1;cnt++){
+            ListNode remove = cur.next;
+            cur.next = remove.next;
+            remove.next = pre.next;
+            pre.next = remove;
+        }
+        return dummy.next;
     }
 
     /**
@@ -51,10 +72,12 @@ public class Algorithm {
         int max = array.get(0), min = array.get(0);
         // 找到最大值最小值
         for (int i = 0; i < array.size(); i++) {
-            if (array.get(i) > max)
+            if (array.get(i) > max) {
                 max = array.get(i);
-            if (array.get(i) < min)
+            }
+            if (array.get(i) < min) {
                 min = array.get(i);
+            }
         }
         int bucketCount = (max - min) / bucketSize + 1;
         ArrayList<ArrayList<Integer>> bucketArr = new ArrayList<>(bucketCount);
@@ -67,11 +90,13 @@ public class Algorithm {
         }
         for (int i = 0; i < bucketCount; i++) {
             if (bucketSize == 1) { // 如果带排序数组中有重复数字时  感谢 @见风任然是风 朋友指出错误
-                for (int j = 0; j < bucketArr.get(i).size(); j++)
+                for (int j = 0; j < bucketArr.get(i).size(); j++) {
                     resultArr.add(bucketArr.get(i).get(j));
+                }
             } else {
-                if (bucketCount == 1)
+                if (bucketCount == 1) {
                     bucketSize--;
+                }
                 ArrayList<Integer> temp = BucketSort(bucketArr.get(i), bucketSize);
                 for (int j = 0; j < temp.size(); j++)
                     resultArr.add(temp.get(j));
@@ -237,6 +262,14 @@ public class Algorithm {
         ListNode(int val, ListNode next) {
             this.val = val;
             this.next = next;
+        }
+
+        @Override
+        public String toString() {
+            return "ListNode{" +
+                    "val=" + val +
+                    ", next=" + next +
+                    '}';
         }
     }
 
